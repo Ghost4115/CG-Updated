@@ -2,6 +2,11 @@ Name:Manav Uttekar
 Rollno:11
 TItle: Write C++ program to draw a concave polygon and fill it with desired color using scan fill algorithm
 
+Choose a Seed Point: Pick a starting point (usually the position where the user clicks) inside the area to be filled.
+Check Neighboring Pixels: Examine the four neighbors (up, down, left, right) of the current pixel.
+Fill the Region: If a neighboring pixel is the same color as the seed color, change its color and add it to the list of pixels to be processed.
+Repeat: Continue the process until there are no more pixels left to process.
+
 #include <graphics.h>
 #include <iostream>
 using namespace std;
