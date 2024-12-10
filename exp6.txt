@@ -1,0 +1,132 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Base class for Game
+class Game {
+public:
+    virtual void displayBoard() = 0;  // Pure virtual function to display the board
+    virtual bool makeMove(int row, int col, char player) = 0;  // Virtual function to make a move
+    virtual bool checkWinner() = 0;  // Virtual function to check if there's a winner
+    virtual bool isBoardFull() = 0;  // Virtual function to check if the board is full
+};
+
+// Derived class for TicTacToe
+class TicTacToe : public Game {
+private:
+    vector<vector<char>> board;  // 3x3 board
+    char currentPlayer;  // To store current player 'X' or 'O'
+
+public:
+    // Constructor to initialize the board
+    TicTacToe() {
+        board = vector<vector<char>>(3, vector<char>(3, ' '));  // 3x3 board with empty spaces
+        currentPlayer = 'X';  // Player 'X' starts
+    }
+
+    // Display the Tic-Tac-Toe board
+    void displayBoard() override {
+        cout << "\nTic Tac Toe Board\n";
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                cout << board[i][j];
+                if (j < 2) cout << " | ";
+            }
+            cout << endl;
+            if (i < 2) cout << "---------" << endl;
+        }
+    }
+
+    // Make a move for the current player
+    bool makeMove(int row, int col, char player) override {
+        if (row < 0 || row >= 3 || col < 0 || col >= 3 || board[row][col] != ' ') {
+            cout << "Invalid move! Try again.\n";
+            return false;  // Invalid move
+        }
+        board[row][col] = player;  // Place the player's mark on the board
+        return true;
+    }
+
+    // Check if there's a winner
+    bool checkWinner() override {
+        // Check rows, columns, and diagonals
+        for (int i = 0; i < 3; i++) {
+            // Check rows
+            if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') {
+                return true;
+            }
+            // Check columns
+            if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') {
+                return true;
+            }
+        }
+
+        // Check diagonals
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ') {
+            return true;
+        }
+        if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != ' ') {
+            return true;
+        }
+
+        return false;  // No winner yet
+    }
+
+    // Check if the board is full
+    bool isBoardFull() override {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == ' ') {
+                    return false;  // Found an empty space
+                }
+            }
+        }
+        return true;  // No empty spaces left
+    }
+
+    // Switch current player
+    void switchPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+    // Get the current player
+    char getCurrentPlayer() {
+        return currentPlayer;
+    }
+};
+
+// Main function
+int main() {
+    TicTacToe game;  // Create a TicTacToe object
+    int row, col;  // For storing row and column input
+    bool gameOver = false;
+
+    // Game loop
+    while (!gameOver) {
+        game.displayBoard();  // Display the board
+        cout << "Player " << game.getCurrentPlayer() << ", enter your move (row and column): ";
+        cin >> row >> col;
+
+        // Make the move for the current player
+        if (game.makeMove(row, col, game.getCurrentPlayer())) {
+            // Check if the current player won
+            if (game.checkWinner()) {
+                game.displayBoard();
+                cout << "Player " << game.getCurrentPlayer() << " wins!\n";
+                gameOver = true;
+            }
+            // Check if the board is full (draw condition)
+            else if (game.isBoardFull()) {
+                game.displayBoard();
+                cout << "It's a draw!\n";
+                gameOver = true;
+            }
+            else {
+                // Switch the player for the next turn
+                game.switchPlayer();
+            }
+        }
+    }
+
+    return 0;
+}

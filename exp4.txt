@@ -1,0 +1,138 @@
+Name:Manav Uttekar
+Rollno:11
+TItle: Write C++ program to draw 2-D object and perform following basic transformations:
+1. Scaling	2. Translation  3. Rotation. Apply the concept of operator overloading.
+
+
+
+#include <iostream>
+#include <graphics.h>
+#include <cmath>
+using namespace std;
+
+class Point {
+public:
+    int x, y;
+    Point(int x = 0, int y = 0) : x(x), y(y) {}
+};
+
+class Shape {
+protected:
+    Point points[4];  // Assume 4 points for simplicity (rectangle or quadrilateral)
+    int n;
+
+public:
+    Shape(int numPoints = 4) : n(numPoints) {
+        for (int i = 0; i < n; i++) {
+            points[i] = Point();
+        }
+    }
+
+    void input() {
+        cout << "Enter coordinates of the shape's points:\n";
+        for (int i = 0; i < n; i++) {
+            cout << "Point " << i + 1 << " (x y): ";
+            cin >> points[i].x >> points[i].y;
+        }
+    }
+
+    void display() const {
+        for (int i = 0; i < n; i++) {
+            int next = (i + 1) % n;
+            line(300 + points[i].x, 300 - points[i].y, 300 + points[next].x, 300 - points[next].y);
+        }
+    }
+
+    Shape operator*(float scaleFactor) {  // Scaling
+        Shape result = *this;
+        for (int i = 0; i < n; i++) {
+            result.points[i].x = points[i].x * scaleFactor;
+            result.points[i].y = points[i].y * scaleFactor;
+        }
+        return result;
+    }
+
+    Shape operator+(const Point& trans) {  // Translation
+        Shape result = *this;
+        for (int i = 0; i < n; i++) {
+            result.points[i].x = points[i].x + trans.x;
+            result.points[i].y = points[i].y + trans.y;
+        }
+        return result;
+    }
+
+    Shape operator^(float angleDeg) {  // Rotation
+        Shape result = *this;
+        float angleRad = angleDeg * M_PI / 180.0;
+        for (int i = 0; i < n; i++) {
+            result.points[i].x = points[i].x * cos(angleRad) - points[i].y * sin(angleRad);
+            result.points[i].y = points[i].x * sin(angleRad) + points[i].y * cos(angleRad);
+        }
+        return result;
+    }
+};
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, NULL);
+
+    Shape shape;
+    shape.input();
+
+    int choice;
+    do {
+        cleardevice();
+        line(300, 0, 300, 600);  // y-axis
+        line(0, 300, 600, 300);  // x-axis
+        shape.display();
+
+        cout << "\nTransformation Menu:";
+        cout << "\n1. Scaling\n2. Translation\n3. Rotation\n4. Exit";
+        cout << "\nChoose an option: ";
+        cin >> choice;
+
+        Shape transformedShape;
+        switch (choice) {
+            case 1: {
+                float scale;
+                cout << "Enter scale factor: ";
+                cin >> scale;
+                transformedShape = shape * scale;
+                break;
+            }
+            case 2: {
+                Point translation;
+                cout << "Enter translation values (tx ty): ";
+                cin >> translation.x >> translation.y;
+                transformedShape = shape + translation;
+                break;
+            }
+            case 3: {
+                float angle;
+                cout << "Enter rotation angle (in degrees): ";
+                cin >> angle;
+                transformedShape = shape ^ angle;
+                break;
+            }
+            case 4:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice!\n";
+                continue;
+        }
+
+        if (choice >= 1 && choice <= 3) {
+            cleardevice();
+            line(300, 0, 300, 600);  // y-axis
+            line(0, 300, 600, 300);  // x-axis
+            transformedShape.display();
+            cout << "Press any key to continue...\n";
+            getch();
+        }
+    } while (choice != 4);
+
+    closegraph();
+    return 0;
+}
+
