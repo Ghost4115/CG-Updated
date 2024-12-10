@@ -3,6 +3,12 @@ Rollno:11
 
 Title:Write C++ program to implement Cohen Southerland line clipping algorithm.
 
+Outcode Calculation: Each endpoint of the line is assigned a 4-bit outcode based on its position relative to the clipping window (top, bottom, left, right).
+Trivial Cases:
+If both endpoints are inside the window (outcode = 0000), the line is accepted.
+If both endpoints are outside in the same region (outcodes have a logical AND not equal to zero), the line is rejected.
+Clipping: If the line is partially inside, it is clipped by finding the intersection points of the line with the clipping window’s boundaries, and the endpoints are updated.
+
 #include <graphics.h>
 #include <iostream>
 using namespace std;
