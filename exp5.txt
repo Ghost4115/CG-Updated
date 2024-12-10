@@ -2,6 +2,11 @@ Name:Manav Uttekar
 Rollno:11
 TItle: Write C++ program to generate snowflake using concept of fractals
 
+Start with an equilateral triangle: The initial shape is an equilateral triangle.
+Divide each side into three equal parts: For each side of the triangle, divide it into three equal segments.
+Create an equilateral triangle on the middle segment: On each of the three sides, replace the middle segment with two new segments that form an equilateral triangle.
+Repeat the process: For each new segment, repeat the process (divide into three equal parts and form new triangles) until a certain level of recursion is reached.
+
 #include <iostream>
 #include <math.h>
 #include <graphics.h>
