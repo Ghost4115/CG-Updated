@@ -1,3 +1,19 @@
+Base Class Player: This defines the interface with a pure virtual function makeMove(). It forces derived classes to implement this function.
+
+Derived Classes:
+
+HumanPlayer: In this class, the makeMove() function takes user input to place their symbol on the board.
+AIPlayer: In this class, the makeMove() function automatically places its symbol in the first available spot.
+Polymorphism: The makeMove() function is overridden in both derived classes, and when invoked through the base class pointer (Player*), the appropriate function for the specific player (human or AI) is called.
+
+Winner Check: After each move, the program checks if a player has won by examining the rows, columns, and diagonals.
+
+How It Works:
+The game alternates between a human player and an AI player.
+The human player is asked to input the row and column for their move.
+The AI automatically places its symbol in the first available space.
+The game continues until either a player wins, or the game ends in a draw after 9 moves.
+
 #include <iostream>
 #include <vector>
 using namespace std;
